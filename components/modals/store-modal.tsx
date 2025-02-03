@@ -7,6 +7,7 @@ import { Modal } from "@/components/ui/modal";
 import { useForm } from "react-hook-form";
 import { Form, FormField, FormItem, FormLabel, FormControl } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 const formSchema = z.object({
   name: z.string().min(1, "Store name is required"),
 });
@@ -49,7 +50,12 @@ export const StoreModal = () => {
                 </FormItem>
               )}
             />
-           
+            <div className="pt-6 space-x-2 flex items-center justify-end w-full" >
+
+            <Button type="submit"> Continue </Button>
+           <Button variant="outline" onClick={storeModal.onClose} > Cancel </Button>
+        
+           </div>
           </form>
         </Form>
       </div>
