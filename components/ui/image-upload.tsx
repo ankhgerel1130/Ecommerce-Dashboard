@@ -49,7 +49,10 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
                     </div>
                 ))}
             </div>
-            <CldUploadWidget onUpload={onUpload} uploadPreset='dhjbhmun'>
+            <CldUploadWidget 
+    onSuccess={(result: any) => onUpload(result)}
+    uploadPreset='dhjbhmun'
+>
                 {({ open }) => {
                     const onClick = () => {
                         open();
