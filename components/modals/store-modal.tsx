@@ -37,7 +37,7 @@ export const StoreModal = () => {
   
     console.log(response.data);
    } catch (error){
-    toast.error("Something went wrong"); 
+    toast.error("Error"); 
    } finally{
     setLoading(false)
    }
@@ -64,7 +64,7 @@ export const StoreModal = () => {
                     <Input 
                     disabled={loading} //
                     {...field} 
-                    placeholder="E-commerce" {...field} />
+                    placeholder="Дэлгүүрийн нэрийг бичнэ үү!" {...field} />
                   </FormControl>
                   <FormMessage></FormMessage>
                 </FormItem>

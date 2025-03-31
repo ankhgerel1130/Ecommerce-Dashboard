@@ -76,7 +76,7 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
   onClose={() => setOpen(false)}
   onConfirm={onDelete}
   loading={loading}
-  storeName={initialData.name} // Pass the store name here
+  storeName={initialData.name} //Store ner damjuulah
 />
 
 
@@ -126,7 +126,7 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
 
     
       <ApiAlert
-         title="NEXT_PUBLIC_API_URL"
+         title="URL TEST"
          description={`${origin}/api/${params.storeId}`} 
          variant="public"
          

@@ -46,7 +46,7 @@ export const AlertModal: React.FC<AlertModalProps> = ({
         <Button
           disabled={loading}
           variant="destructive"
-          onClick={onConfirm} // Trigger the delete action
+          onClick={onConfirm} // Delete hiih
         >
           Continue
         </Button>

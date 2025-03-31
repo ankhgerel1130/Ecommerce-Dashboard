@@ -1,16 +1,16 @@
 import { UserButton } from "@clerk/nextjs";
 import { MainNav } from "@/components/main-nav";
 import StoreSwitcher from "@/components/store-swticher";
-import { redirect } from "next/navigation"; // Assuming you're using Next.js 13+
+import { redirect } from "next/navigation";
 import { auth } from '@clerk/nextjs/server';
 import prismadb from "@/lib/prismadb";
 
 const Navbar = async () => {
-  // Await auth() to get the user data
+
   const { userId } = await auth();
 
   if (!userId) {
-    // Redirect if userId is not found
+ 
     redirect("/sign-in");
   }
 
@@ -26,7 +26,7 @@ const Navbar = async () => {
       <div className="flex h-16 items-center px-4 justify-between">
         {/* Store Swticher */}
         <div className="flex items-center">
-          <StoreSwitcher items={stores} /> {/*Storeg Storeswitcher ruu yvulj bn */}
+          <StoreSwitcher items={stores} /> {/*Storeg Storeswitcher ruu yvulah*/}
         </div>
 
         {/* Route heseg */}
