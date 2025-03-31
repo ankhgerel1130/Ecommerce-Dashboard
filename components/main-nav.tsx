@@ -11,7 +11,7 @@ export function MainNav({
   const pathname = usePathname();
   const params = useParams();
 
-  // Define the routes dynamically using the storeId from params
+
   const routes = [
     {
       href: `/${params.storeId}`,
@@ -23,6 +23,13 @@ export function MainNav({
       label: "Billboards",
       active: pathname === `/${params.storeId}/billboards`,
     },
+
+    {
+      href: `/${params.storeId}/categories`,
+      label: "Categories",
+      active: pathname === `/${params.storeId}/categories`,
+    },
+
     {
         href: `/${params.storeId}/settings`,
         label: "Settings",
