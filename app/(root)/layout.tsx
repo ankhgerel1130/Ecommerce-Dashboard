@@ -15,6 +15,8 @@ export default async function SetupLayout({
     return null; 
   }
 
+
+
   // Hereglegchid bga store iig shalgah
   const store = await prismadb.store.findFirst({
     where: {
