@@ -4,18 +4,18 @@ import { Billboard } from "@prisma/client";
 import { Heading } from "@/components/ui/Heading";
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@radix-ui/react-separator";
+import { Separator } from "@/components/ui/separator";
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
-import { BillboardColumn, columns } from "./columns";
+import { CategoryColumn, columns } from "./columns";
 import { DataTable } from "@/components/ui/date-table";
 import { ApiList } from "@/components/ui/api-list";
 
 
-interface BillboardClientProps{
-    data?: BillboardColumn[]
+interface CategoryClientProps{
+    data?: CategoryColumn[]
 }
-export const BillboardClient: React.FC<BillboardClientProps> = ({
+export const CategoryClient: React.FC<CategoryClientProps> = ({
     
     data = []}) => {
     const router = useRouter();
@@ -25,19 +25,19 @@ export const BillboardClient: React.FC<BillboardClientProps> = ({
         <>
             <div className="flex items-center justify-between">
                 <Heading 
-                    title={`Billboards (${data.length})`} 
-                    description="Billboard management"
+                    title={`Categories (${data.length})`} 
+                    description="Category management"
                 />
-                <Button onClick={() => router.push(`/${params.storeId}/billboards/new`)}>
+                <Button onClick={() => router.push(`/${params.storeId}/categories/new`)}>
                     <Plus className="mr-2 h-4 w-4" />
                     Add New
                 </Button>
             </div>
             <Separator />
-            <DataTable searchKey="label" columns={columns} data={data}/>
-            <Heading title="Api" description="Billboard Api" />
+            <DataTable searchKey="name" columns={columns} data={data}/>
+            <Heading title="API" description="Category Api" />
             <Separator />
-            <ApiList entityName="billboards" entityIdName="billboardId"/>
+            <ApiList entityName="categories" entityIdName="categoryId"/>
         </>
     );
 };

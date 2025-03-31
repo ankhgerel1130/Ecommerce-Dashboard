@@ -36,7 +36,7 @@ model Category{
   billboardId String
   billboard Billboard @relation(fields: [billboardId], references: [id])
   name String
-  createAt DateTime @default(now())
+  createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([storeId])
