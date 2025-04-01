@@ -2,21 +2,20 @@ import prismadb from "@/lib/prismadb";
 import { auth } from '@clerk/nextjs/server';
 import { Label } from "@radix-ui/react-label";
 import { NextResponse } from "next/server";
-
 export async function GET(
     req: Request,
-    { params }: { params: { colorId: string } }
+    context: { params: { colorId: string } }
 ) {
     try {
-       
+        const { colorId } = context.params; 
 
-        if (!params.colorId) {
-            return new NextResponse("Size id is required", { status: 400 });
+        if (!colorId) {
+            return new NextResponse("Color id is required", { status: 400 });
         }
 
         const color = await prismadb.color.findUnique({
             where: {
-                id: params.colorId,
+                id: colorId,
             }
         });
 

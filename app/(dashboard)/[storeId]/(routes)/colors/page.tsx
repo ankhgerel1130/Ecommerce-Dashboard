@@ -10,15 +10,14 @@ interface ColorsPageProps {
   };
 }
 
-const ColorsPage = async ({ params }: ColorsPageProps) => {
+const ColorsPage = async ({ params }: { params: { storeId: string } }) => {
+  const { storeId } = await params; // ✅ Await params before use
+
   const colors = await prismadb.color.findMany({
-    where: {
-      storeId: params.storeId,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
+      where: { storeId },
+      orderBy: { createdAt: "desc" }
   });
+
 
   const formattedColors: ColorColumn[] = colors.map((item) => ({
 

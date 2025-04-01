@@ -15,6 +15,7 @@ model Store {
   billboards  Billboard[] @relation("StoreToBillboard") 
   categories  Category[]  @relation("StoreToCategory")
   sizes       Size[]      @relation("StoreToSize") 
+  products Product[] @relation("StoreToProduct")
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 }
@@ -25,7 +26,8 @@ model Billboard {
   store      Store     @relation("StoreToBillboard", fields: [storeId], references: [id])
   label      String
   imageUrl   String
-  categories Category[] @relation("BillboardToCategory") // ✅ Explicit relation for categories
+  categories Category[] @relation("BillboardToCategory")
+
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 
@@ -69,3 +71,8 @@ model Color {
   @@index([storeId])
 }
 
+model Product {
+  id String @id @default(uuid())
+  storeId String
+  store Store @relation("StoreToProduct", fields: [storeId], references: [id])
+}

@@ -1,30 +1,30 @@
 import { SizesClient } from "./components/client";
 import prismadb from "@/lib/prismadb";
 import { SizeColumn } from "./components/columns";
-import {format} from "date-fns";
+import { format } from "date-fns";
+
 interface SizesPageProps {
-  params: {
-    storeId: string;
-  };
+  params?: { storeId?: string }; 
 }
 
 const SizesPage = async ({ params }: SizesPageProps) => {
+  const storeId = params?.storeId; // paramsru safe oroh
+
+  if (!storeId) {
+    return <div>Error: Store ID is missing.</div>;
+  }
+
   const sizes = await prismadb.size.findMany({
-    where: {
-      storeId: params.storeId,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
+    where: { storeId },
+    orderBy: { createdAt: "desc" },
   });
 
   const formattedSizes: SizeColumn[] = sizes.map((item) => ({
-
     id: item.id,
     name: item.name,
     value: item.value,
-    createdAt: format(item.createdAt, "yyyy - MMMM - do")
-  }))
+    createdAt: format(item.createdAt, "yyyy - MMMM - do"),
+  }));
 
   return (
     <div className="flex-col">
