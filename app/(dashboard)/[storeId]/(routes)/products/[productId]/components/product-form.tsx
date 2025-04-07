@@ -39,7 +39,7 @@ interface ProductFormProps {
 
 const formSchema = z.object({
   name: z.string().min(1, "Name is required"),
-  label: z.string().optional(), // ✅ Added this to match the form field
+  label: z.string().optional(), 
   images: z.object({ url: z.string() }).array().nonempty("At least one image is required"),
   price: z.coerce.number().min(1, "Price must be at least 1"),
   categoryId: z.string().min(1, "Category is required"),
