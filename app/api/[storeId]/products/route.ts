@@ -105,6 +105,7 @@ export async function GET(
         const colorId = searchParams.get("colorId") || undefined;
         const sizeId = searchParams.get("sizeId") || undefined;
         const isFeatured = searchParams.get("isFeatured") || undefined;
+        const excludeId = searchParams.get("excludeId") || undefined;
         
          if(!params.storeId){
             return new NextResponse("Store id is required", { status: 400 });
@@ -118,7 +119,8 @@ export async function GET(
                colorId,
                sizeId,
                isFeatured: isFeatured ? true : undefined,
-               isArchived: false
+               isArchived: false,
+               NOT: excludeId ? { id: excludeId } : undefined
             },
             include: {
                 images: true,

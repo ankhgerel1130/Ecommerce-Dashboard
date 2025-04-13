@@ -1,133 +1,128 @@
-import prismadb from "@/lib/prismadb";
+
+// GET CATEGORY
 import { auth } from '@clerk/nextjs/server';
-import { Label } from "@radix-ui/react-label";
 import { NextResponse } from "next/server";
+import prismadb from "@/lib/prismadb";
 
 export async function GET(
-    req: Request,
-    { params }: { params: { categoryId: string } }
+  req: Request,
+  { params }: { params: { storeId: string; categoryId: string } }
 ) {
-    try {
-       
+  try {
+    const { storeId, categoryId } = params;
 
-        if (!params.categoryId) {
-            return new NextResponse("categoryId id is required", { status: 400 });
-        }
-
-        const billboard = await prismadb.category.findUnique({
-            where: {
-                id: params.categoryId,
-            }
-        });
-
-        return NextResponse.json(category);
-
-    } catch (error) {
-        console.log('[CATEGORIES_GET]', error);
-        return new NextResponse("Internal error", { status: 500 });
+ 
+    if (!categoryId) {
+      return new NextResponse("Category ID is required", { status: 400 });
     }
-};
+
+    const category = await prismadb.category.findFirst({
+      where: {
+        id: categoryId,
+        storeId: storeId,
+      },
+      include: {
+        billboard: true,
+      },
+    });
+
+  
+    if (!category) {
+      return new NextResponse("Category not found", { status: 404 });
+    }
+
+
+    return NextResponse.json(category);
+
+  } catch (error) {
+    console.error("[CATEGORIES_GET]", error); 
+    return new NextResponse("Internal error", { status: 500 });
+  }
+}
+
 
 export async function PATCH(
-    req: Request,
-    { params }: { params: { storeId: string, categoryId: string } }
+  req: Request,
+  { params }: { params: { storeId: string; categoryId: string } }
 ) {
-    try {
-        const user = await auth(); 
-        const { userId } = user; 
+  try {
+    const { userId } = await auth();
 
-        const body = await req.json();
-        const { name, billboardId} = body;
+    const body = await req.json();
+    const { name, billboardId } = body;
 
-        if (!userId) {
-            return new NextResponse("Unauthorized", { status: 401 });
-        }
-
-        if (!name) {
-            return new NextResponse("label is required", { status: 400 });
-        }
-        if (!billboardId) {
-            return new NextResponse("imageUrl is required", { status: 400 });
-        }
-
-        if (!params.categoryId) {
-            return new NextResponse("category id is required", { status: 400 });
-        }
-
-
-        
-        const storeByUserId = await prismadb.store.findFirst({
-            where: {
-                id: params.storeId,
-                userId
-            }
-        });
-        if(!storeByUserId){
-            return new NextResponse("Unauth", {status: 403});
-
-        }
-
-
-        const category = await prismadb.category.updateMany({
-            where: {
-                id: params.categoryId,
-                
-            },
-            data: {
-                name,
-                billboardId
-            }
-        });
-
-        return NextResponse.json(category);
-
-    } catch (error) {
-        console.log('[CATEGORY_PATCH]', error);
-        return new NextResponse("Internal error", { status: 500 });
+    if (!userId) {
+      return new NextResponse("Unauthorized", { status: 401 });
     }
-};
 
+    if (!name) {
+      return new NextResponse("Label is required", { status: 400 });
+    }
+
+    if (!billboardId) {
+      return new NextResponse("Billboard ID is required", { status: 400 });
+    }
+
+    const storeByUserId = await prismadb.store.findFirst({
+      where: {
+        id: params.storeId,
+        userId,
+      },
+    });
+
+    if (!storeByUserId) {
+      return new NextResponse("Unauthorized", { status: 403 });
+    }
+
+    const category = await prismadb.category.update({
+      where: {
+        id: params.categoryId,
+      },
+      data: {
+        name,
+        billboardId,
+      },
+    });
+
+    return Response.json(category); // ✅ Clean return
+  } catch (error) {
+    console.error("[CATEGORY_PATCH]", error);
+    return new NextResponse("Internal error", { status: 500 });
+  }
+}
+
+// DELETE CATEGORY
 export async function DELETE(
-    req: Request,
-    { params }: { params: { storeId: string, categoryId: string } }
+  req: Request,
+  { params }: { params: { storeId: string; categoryId: string } }
 ) {
-    try {
-        const user = await auth();
-        const { userId } = user; 
+  try {
+    const { userId } = await auth();
 
-
-        if (!userId) {
-            return new NextResponse("Unauthorized", { status: 401 });
-        }
-
-
-        if (!params.categoryId) {
-            return new NextResponse("category id is required", { status: 400 });
-        }
-
-
-        
-        const storeByUserId = await prismadb.store.findFirst({
-            where: {
-                id: params.storeId,
-                userId
-            }
-        });
-        if(!storeByUserId){
-            return new NextResponse("Unauth", {status: 403});
-
-        }
-
-        const category = await prismadb.category.deleteMany({
-            where: {
-                id: params.categoryId,
-            }
-        });
-
-        return NextResponse.json(category);
-
-    } catch (error) {
-        console.log('[Category_DELETE]', error);
-        return new NextResponse("Internal error", { status: 500 });
+    if (!userId) {
+      return new NextResponse("Unauthorized", { status: 401 });
     }
-};
+
+    const storeByUserId = await prismadb.store.findFirst({
+      where: {
+        id: params.storeId,
+        userId,
+      },
+    });
+
+    if (!storeByUserId) {
+      return new NextResponse("Unauthorized", { status: 403 });
+    }
+
+    const category = await prismadb.category.delete({
+      where: {
+        id: params.categoryId,
+      },
+    });
+
+    return Response.json(category); // ✅ Clean return
+  } catch (error) {
+    console.error("[CATEGORY_DELETE]", error);
+    return new NextResponse("Internal error", { status: 500 });
+  }
+}
