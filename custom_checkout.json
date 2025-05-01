@@ -1,0 +1,26 @@
+{
+    "checkout_session": {
+      "metadata": {
+        "orderId": "test_order_123",
+        "storeId": "test_store_123"
+      },
+      "payment_intent_data": {
+        "metadata": {
+          "orderId": "test_order_123",
+          "storeId": "test_store_123"
+        }
+      },
+      "customer_details": {
+        "address": {
+          "city": "San Francisco",
+          "country": "US",
+          "line1": "123 Main St",
+          "postal_code": "94111",
+          "state": "CA"
+        },
+        "email": "test@example.com",
+        "name": "Test Customer"
+      },
+      "payment_status": "paid"
+    }
+  }

@@ -31,7 +31,7 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
         <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+              <CardTitle className="text-sm font-medium">Нийт орлого</CardTitle>
               <DollarSign className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -43,7 +43,7 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Sales</CardTitle>
+              <CardTitle className="text-sm font-medium">Зарагдсан барааны тоо хэмжээ </CardTitle>
               <CreditCardIcon className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -53,7 +53,7 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Products in Stock</CardTitle>
+              <CardTitle className="text-sm font-medium">Бэлэн барааны тоо</CardTitle>
               <PackageIcon className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
@@ -64,7 +64,7 @@ const DashboardPage: React.FC<DashboardPageProps> = async ({ params }) => {
 
         <Card className="col-span-4">
           <CardHeader>
-            <CardTitle>Overview</CardTitle>
+            <CardTitle>График үзүүлэлт</CardTitle>
           </CardHeader>
           <CardContent className="pl-2">
             <Overview data={graphRevenue} />

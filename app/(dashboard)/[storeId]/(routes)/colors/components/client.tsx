@@ -30,7 +30,7 @@ export const ColorsClient: React.FC<ColorsClientProps> = ({
                 />
                 <Button onClick={() => router.push(`/${params.storeId}/colors/new`)}>
                     <Plus className="mr-2 h-4 w-4" />
-                    Add New
+                    Нэмэх
                 </Button>
             </div>
             <Separator />

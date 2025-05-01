@@ -24,7 +24,7 @@ const ColorsPage = async ({ params }: { params: { storeId: string } }) => {
     id: item.id,
     name: item.name,
     value: item.value,
-    createdAt: format(item.createdAt, "yyyy - MMMM - do")
+   createdAt: format(item.createdAt, "yyyy - MMMM - do")
   }))
 
   return (

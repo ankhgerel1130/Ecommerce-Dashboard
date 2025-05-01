@@ -50,6 +50,8 @@ export async function PATCH(
             colorId,
             sizeId,
             images,
+            description,
+            quality,
             isFeatured,
             isArchived
         } = body; //  body goor yvulah
@@ -110,6 +112,8 @@ export async function PATCH(
                 categoryId,
                 colorId,
                 sizeId,
+                quality,
+                description,
                 images:{
                     deleteMany: {}
                 },

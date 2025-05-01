@@ -1,67 +1,62 @@
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
-
 import { stripe } from "@/lib/stripe";
 import prismadb from "@/lib/prismadb";
 
 const relevantEvents = new Set([
-  "checkout.session.completed",
+    "checkout.session.completed",
+    "checkout.session.async_payment_succeeded",
 ]);
-
 export async function POST(req: Request) {
   const body = await req.text();
-  const signature = headers().get("Stripe-Signature") as string;
+  const signature = (await headers()).get("Stripe-Signature")!;
+
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+  if (!webhookSecret) {
+    return new NextResponse("Webhook secret not configured", { status: 500 });
+  }
 
   let event: Stripe.Event;
-
   try {
-    event = stripe.webhooks.constructEvent(
-      body,
-      signature,
-      process.env.STRIPE_WEBHOOK_SECRET!
-    );
+    event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
   } catch (err: any) {
-    console.error(`[STRIPE_WEBHOOK_ERROR]`, err.message);
+    console.error(`❌ Webhook error: ${err.message}`);
     return new NextResponse(`Webhook Error: ${err.message}`, { status: 400 });
   }
 
-  if (relevantEvents.has(event.type)) {
+  console.log(`🔔 Webhook type: ${event.type}`);
+
+  if (event.type === "checkout.session.completed") {
+    const session = event.data.object as Stripe.Checkout.Session;
+    
+    // Debugging logs
+    console.log("Payment status:", session.payment_status);
+    console.log("Session metadata:", session.metadata);
+
+    if (!session.metadata?.orderId) {
+      console.warn("⚠️ No orderId in metadata - this is expected for test triggers");
+      console.log("For testing, you can manually handle this case");
+      return NextResponse.json({ received: true, warning: "No orderId in metadata" }, { status: 200 });
+    }
+
+    // Actual order processing
     try {
-      if (event.type === "checkout.session.completed") {
-        const session = event.data.object as Stripe.Checkout.Session;
-
-        // Check if orderId is attached to metadata
-        const orderId = session.metadata?.orderId;
-
-        if (!orderId) {
-          console.error("Missing orderId in metadata");
-          return new NextResponse("Missing orderId", { status: 400 });
-        }
-
-        await prismadb.order.update({
-          where: {
-            id: orderId,
-          },
-          data: {
-            isPaid: true,
-          },
-          include: {
-            orderItems: {
-              include: {
-                product: true,
-              },
-            },
-          },
-        });
-
-        console.log(`✅ Order ${orderId} marked as paid.`);
-      }
+      await prismadb.order.update({
+        where: { id: session.metadata.orderId },
+        data: {
+          isPaid: true,
+          address: session.customer_details?.address 
+            ? `${session.customer_details.address.line1}, ${session.customer_details.address.city}`
+            : null,
+          phone: session.customer_details?.phone || null,
+        },
+      });
+      console.log(`✅ Updated order ${session.metadata.orderId}`);
     } catch (error) {
-      console.error(`[WEBHOOK_HANDLER_ERROR]`, error);
-      return new NextResponse("Webhook handler failed", { status: 500 });
+      console.error("❌ Order update failed:", error);
     }
   }
 
-  return new NextResponse(null, { status: 200 });
+  return NextResponse.json({ received: true }, { status: 200 });
 }

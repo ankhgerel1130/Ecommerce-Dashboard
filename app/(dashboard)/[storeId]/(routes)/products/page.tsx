@@ -34,7 +34,10 @@ const ProductsPage = async ({ params }: ProductsPageProps) => {
     category: item.category.name,
     size: item.size.name,
     color: item.color.value,
-    createdAt: format(item.createdAt, "yyyy - MMMM - do")
+    description: item.description || "", 
+    quality: item.quality?.toString() || "0", 
+    
+   createdAt: format(item.createdAt, "yyyy - MMMM - do")
   }))
 
   return (

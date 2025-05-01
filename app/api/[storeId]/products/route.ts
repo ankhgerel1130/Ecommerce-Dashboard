@@ -23,6 +23,8 @@ export async function POST(
             colorId,
             sizeId,
             images,
+            description,
+            quality,
             isFeatured,
             isArchived
         } = body; //  body goor yvulah
@@ -74,6 +76,9 @@ export async function POST(
                 categoryId,
                 colorId,
                 sizeId,
+                description,
+                quality,
+                
                 storeId: params.storeId,
                 images: {
                     createMany:{

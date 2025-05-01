@@ -45,6 +45,8 @@ const formSchema = z.object({
   categoryId: z.string().min(1, "Category is required"),
   colorId: z.string().min(1, "Color is required"),
   sizeId: z.string().min(1, "Size is required"),
+  description: z.string().optional(), //nem
+  quality: z.coerce.number().optional(), //nem
   isFeatured: z.boolean().default(false).optional(),
   isArchived: z.boolean().default(false).optional(),
 });
@@ -86,6 +88,8 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           categoryId: "",
           colorId: "",
           sizeId: "",
+          description: "",
+          quality: 0,
           isFeatured: false,
           isArchived: false,
         },
@@ -268,6 +272,45 @@ const onDelete = async () => {
                                 </FormItem>
                             )}
                         />
+                        <FormField
+  control={form.control}
+  name="description"
+  render={({ field }) => (
+    <FormItem>
+      <FormLabel>Description</FormLabel>
+      <FormControl>
+        <Input 
+          disabled={loading} 
+          placeholder="Product description (optional)" 
+          {...field} 
+          value={field.value || ''}
+        />
+      </FormControl>
+      <FormMessage />
+    </FormItem>
+  )}
+/>
+
+<FormField
+  control={form.control}
+  name="quality"
+  render={({ field }) => (
+    <FormItem>
+      <FormLabel>Quality</FormLabel>
+      <FormControl>
+        <Input 
+          type="number" 
+          disabled={loading} 
+          placeholder="Quality (optional)" 
+          {...field} 
+          value={field.value || ''}
+          onChange={(e) => field.onChange(e.target.value === '' ? undefined : parseInt(e.target.value))}
+        />
+      </FormControl>
+      <FormMessage />
+    </FormItem>
+  )}
+/>
                           <FormField
                             control={form.control} 
                             name="colorId"
@@ -324,7 +367,7 @@ const onDelete = async () => {
                     </FormLabel>
                     <FormDescription>
 
-                      This product will appear on the home
+                      Home featured хэсэгт харагдана
                     </FormDescription>
 
 
@@ -352,7 +395,7 @@ const onDelete = async () => {
                     </FormLabel>
                     <FormDescription>
 
-                      This product will not appear 
+                      Архив
                     </FormDescription>
                   </div>
                 </FormItem>
