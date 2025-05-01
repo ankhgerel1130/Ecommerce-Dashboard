@@ -191,7 +191,7 @@ const onDelete = async () => {
                 <FormItem>
                   <FormLabel>Price</FormLabel>
                   <FormControl>
-                    <Input type="number" disabled={loading} placeholder="9.99" {...field} />
+                    <Input type="number" disabled={loading} placeholder="100000" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -281,7 +281,7 @@ const onDelete = async () => {
       <FormControl>
         <Input 
           disabled={loading} 
-          placeholder="Product description (optional)" 
+          placeholder="Product description" 
           {...field} 
           value={field.value || ''}
         />
@@ -301,10 +301,18 @@ const onDelete = async () => {
         <Input 
           type="number" 
           disabled={loading} 
-          placeholder="Quality (optional)" 
+          placeholder="1-100 (optional)" 
           {...field} 
           value={field.value || ''}
-          onChange={(e) => field.onChange(e.target.value === '' ? undefined : parseInt(e.target.value))}
+          onChange={(e) => {
+            const value = e.target.value;
+            // Only allow numbers between 1-100 or empty string
+            if (value === '' || (Number(value) >= 1 && Number(value) <= 100)) {
+              field.onChange(value === '' ? undefined : parseInt(value));
+            }
+          }}
+          min="1"
+          max="100"
         />
       </FormControl>
       <FormMessage />
